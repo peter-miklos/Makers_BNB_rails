@@ -3,5 +3,6 @@ Rails.application.routes.draw do
 
   resources :spaces do
     resources :requests
+    resources :bookings
   end
 end
