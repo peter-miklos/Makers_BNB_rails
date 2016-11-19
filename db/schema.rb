@@ -10,10 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161119213534) do
+ActiveRecord::Schema.define(version: 20161119225948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bookings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "space_id"
+    t.integer  "request_id"
+    t.index ["request_id"], name: "index_bookings_on_request_id", using: :btree
+    t.index ["space_id"], name: "index_bookings_on_space_id", using: :btree
+  end
+
+  create_table "request_dates", force: :cascade do |t|
+    t.date     "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "request_id"
+    t.index ["request_id"], name: "index_request_dates_on_request_id", using: :btree
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.string   "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "space_id"
+    t.index ["space_id"], name: "index_requests_on_space_id", using: :btree
+  end
+
+  create_table "space_dates", force: :cascade do |t|
+    t.date     "date"
+    t.string   "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "space_id"
+    t.index ["space_id"], name: "index_space_dates_on_space_id", using: :btree
+  end
 
   create_table "spaces", force: :cascade do |t|
     t.string   "name"
@@ -23,4 +57,9 @@ ActiveRecord::Schema.define(version: 20161119213534) do
     t.datetime "updated_at",  null: false
   end
 
+  add_foreign_key "bookings", "requests"
+  add_foreign_key "bookings", "spaces"
+  add_foreign_key "request_dates", "requests"
+  add_foreign_key "requests", "spaces"
+  add_foreign_key "space_dates", "spaces"
 end
