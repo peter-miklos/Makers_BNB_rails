@@ -1,0 +1,2 @@
+class SpaceDate < ApplicationRecord
+end
