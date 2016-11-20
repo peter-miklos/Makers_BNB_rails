@@ -1,0 +1,20 @@
+<h4>Add new space</h4>
+
+<%= form_for(@space, html: {multipart: true}) do |f| %>
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <label for="name" class="mdl-textfield__label"><%= f.label :name %></label>
+    <%= f.text_field(:name, class: "mdl-textfield__input", type: "text", name: "name") %>
+  </div>
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <label for="price" class="mdl-textfield__label"><%= f.label :price %></label>
+    <%= f.text_field(:price, class: "mdl-textfield__input", type: "number", step: "0.01", name: "price") %>
+  </div>
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <label for="description" class="mdl-textfield__label"><%= f.label :description %></label>
+    <%= f.text_area(:description, class: "mdl-textfield__input", type: "text", name: "description") %>
+  </div>
+  <div>
+    <%= f.submit "List my space", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" %>
+    <%= link_to "Cancel", spaces_path %>
+  </div>
+<% end %>
