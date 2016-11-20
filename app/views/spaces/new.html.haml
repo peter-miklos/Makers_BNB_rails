@@ -1,0 +1,15 @@
+%h4 Add new space
+
+= form_for(@space, html: {multipart: true}) do |space|
+  .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+    %label.mdl-textfield__label{:for => "name"}= space.label :name
+    = space.text_field(:name, class: "mdl-textfield__input", name: "name")
+  .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+    %label.mdl-textfield__label{:for => "price"}= space.label :price
+    = space.text_field(:price, class: "mdl-textfield__input", type: "number", name: "price")
+  .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+    %label.mdl-textfield__label{:for => "description"}= space.label :description
+    = space.text_area(:description, class: "mdl-textfield__input", name: "description")
+  %div
+  = space.submit "List my space", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+  = link_to "Cancel", spaces_path
