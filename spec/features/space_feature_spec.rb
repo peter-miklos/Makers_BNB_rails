@@ -91,6 +91,7 @@ feature "spaces" do
         click_button("Update")
 
         expect(current_path).to eq "/spaces/#{space1.id}"
+        expect(page).to have_css("div#notice", text: "Space successfully updated")
         expect(page).to have_content("Updated name")
         expect(page).to have_content(110)
         expect(page).to have_content("Updated description")
@@ -105,7 +106,7 @@ feature "spaces" do
         expect(page).to have_content "nice little room"
       end
 
-      scenario "users cannot edit other users' spaces" do
+      scenario "users cannot access edit link at other users' spaces" do
         sign_out
         sign_in(email: "test2@test.com")
         visit "/spaces"
@@ -114,6 +115,17 @@ feature "spaces" do
         expect(page).not_to have_content("Edit space")
       end
 
+      scenario "users cannot edit other users' spaces" do
+        space1 = Space.last
+        sign_out
+        sign_in(email: "test2@test.com")
+        visit "/spaces/#{space1.id}/edit"
+        fill_in("Description", with: "Updated description")
+        click_button "Update"
+
+        expect(page).to have_css("div#alert", text: "You cannot update this space")
+        expect(page).not_to have_content("Updated description")
+      end
 
     end
   end

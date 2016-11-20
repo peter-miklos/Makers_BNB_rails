@@ -30,6 +30,16 @@ class SpacesController < ApplicationController
     @space = Space.find(params[:id])
   end
 
+  def update
+    @space = Space.find(params[:id])
+    if (current_user.id == @space.user_id)
+      @space.update(space_params)
+      redirect_to space_path(@space), notice: "Space successfully updated"
+    else
+      redirect_to space_path(@space), alert: "You cannot update this space"
+    end
+  end
+
   private
 
   def space_params
