@@ -12,20 +12,15 @@ feature "spaces" do
         expect(page).to have_content "No spaces found"
       end
     end
-
-    context "space is added" do
-      before { Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
-      scenario "display spaces" do
-        visit "/spaces"
-        expect(page).to have_content "nice little room"
-        expect(page).not_to have_content "No spaces found"
-      end
-    end
   end
 
   context "user logged in" do
+    before do
+      sign_in
+      Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id)
+    end
+
     context "add new space" do
-      before {sign_in}
 
       scenario "adds a space and register it in a database" do
         click_link("Add space")
@@ -68,15 +63,39 @@ feature "spaces" do
       end
 
     end
+
+    context "show space" do
+      scenario "user can see the details of a space if logged in" do
+        space1 = Space.last
+        visit "/spaces"
+        click_link("nice little room")
+
+        expect(current_path).to eq "/spaces/#{space1.id}/show"
+        expect(page).to have_content "nice little room"
+        expect(page).to have_content "test"
+      end
+    end
   end
 
   context "user logged out" do
     context "add new space" do
-
       scenario "user cannot add a new space if logged out" do
         visit "/"
-
         expect(page).not_to have_content("Add space")
+      end
+    end
+
+    context "show space" do
+      before { Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
+
+      scenario "user can see the content of a posted space if logged out" do
+        space1 = Space.last
+        visit "/spaces"
+        click_link("nice little room")
+
+        expect(current_path).to eq "/spaces/#{space1.id}/show"
+        expect(page).to have_content "nice little room"
+        expect(page).to have_content "test"
       end
     end
   end

@@ -40,6 +40,15 @@
         <div class="page-content">
           <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
+              <% if notice %>
+                <%= notice %>
+              <% elsif alert %>
+                <%= alert %>
+              <% end %>
+            </div>
+          </div>
+          <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
               <%= yield %>
             </div>
           </div>
