@@ -88,7 +88,7 @@ feature "spaces" do
         fill_in("Name", with: "Updated name")
         fill_in("Price", with: 110)
         fill_in("Description", with: "Updated description")
-        click_button("Submit")
+        click_button("Update")
 
         expect(current_path).to eq "/spaces/#{space1.id}"
         expect(page).to have_content("Updated name")
