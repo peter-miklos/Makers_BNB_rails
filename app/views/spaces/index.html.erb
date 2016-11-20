@@ -1,0 +1,28 @@
+<h4>Available spaces</h4>
+
+<% if @spaces.any? %>
+  <table class="mdl-data-table mdl-js-data-table mdl-data-table mdl-shadow--2dp">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th class="mdl-data-table__cell--non-numeric">Name</th>
+        <th>Price</th>
+        <th class="mdl-data-table__cell--non-numeric">Available</th>
+        <th class="mdl-data-table__cell--non-numeric">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @spaces.each.with_index do |space, index| %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= space.name %></td>
+          <td><%= space.price %></td>
+          <td class="mdl-data-table__cell--non-numeric">TBD</td>
+          <td class="mdl-data-table__cell--non-numeric"><%= space.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  No spaces found
+<% end %>
