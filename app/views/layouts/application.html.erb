@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Makers BNB rails</title>
-    <%= csrf_meta_tags %>    
+    <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-blue.min.css">
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
@@ -18,13 +18,15 @@
           <span class="mdl-layout-title">Makers BNB</span>
           <div class="mdl-layout-spacer"></div>
           <nav class="mdl-navigation mdl-layout--large-screen-only">
-            Put user name here
+            <a class="mdl-navigation__link" href="#">Link</a>
           </nav>
         </div>
       </header>
-      <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">Makers BNB</span>
+      <div class="mdl-layout__drawer" id="menu">
+        <span class="mdl-layout-title logo">Makers BNB</span>
         <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="/">Home</a>
+          <a class="mdl-navigation__link" href="/spaces">Spaces</a>
           <% if user_signed_in? %>
             <a class="mdl-navigation__link" href="/spaces/new">Add space</a>
             <a class="mdl-navigation__link" href="/users/sign_out" data-method="delete">Sign out</a>
@@ -37,7 +39,7 @@
       <main class="mdl-layout__content">
         <div class="page-content">
           <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
               <%= yield %>
             </div>
           </div>
