@@ -1,15 +1,15 @@
 %h4 Add new space
 
-= form_for(@space, html: {multipart: true}) do |space|
+= form_for(@space, html: {multipart: true}) do |f|
   .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-    %label.mdl-textfield__label{:for => "name"}= space.label :name
-    = space.text_field(:name, class: "mdl-textfield__input", name: "name")
+    %label.mdl-textfield__label{:for => "name"}= f.label :name
+    = f.text_field(:name, class: "mdl-textfield__input", name: "name")
   .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-    %label.mdl-textfield__label{:for => "price"}= space.label :price
-    = space.text_field(:price, class: "mdl-textfield__input", type: "number", name: "price")
+    %label.mdl-textfield__label{:for => "price"}= f.label :price
+    = f.text_field(:price, class: "mdl-textfield__input", type: "number", name: "price")
   .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-    %label.mdl-textfield__label{:for => "description"}= space.label :description
-    = space.text_area(:description, class: "mdl-textfield__input", name: "description")
+    %label.mdl-textfield__label{:for => "description"}= f.label :description
+    = f.text_area(:description, class: "mdl-textfield__input", name: "description")
   %div
-  = space.submit "List my space", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-  = link_to "Cancel", spaces_path
+    = f.submit "List my space", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+    = link_to "Cancel", spaces_path
