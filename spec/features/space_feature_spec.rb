@@ -75,9 +75,64 @@ feature "spaces" do
         expect(page).to have_content "test"
       end
     end
+
+    context "edit space" do
+      scenario "users can access and modify their own spaces" do
+        space1 = Space.last
+        visit "/spaces"
+        click_link("nice little room")
+        click_link("Edit space")
+
+        expect(current_path).to eq "/spaces/#{space1.id}/edit"
+
+        fill_in("Name", with: "Updated name")
+        fill_in("Price", with: 110)
+        fill_in("Description", with: "Updated description")
+        click_button("Update")
+
+        expect(current_path).to eq "/spaces/#{space1.id}"
+        expect(page).to have_css("div#notice", text: "Space successfully updated")
+        expect(page).to have_content("Updated name")
+        expect(page).to have_content(110)
+        expect(page).to have_content("Updated description")
+      end
+
+      scenario "user can go back to previous page before submitting any change" do
+        visit "/spaces"
+        click_link("nice little room")
+        click_link("Edit space")
+        click_link("Cancel")
+
+        expect(page).to have_content "nice little room"
+      end
+
+      scenario "users cannot access edit link at other users' spaces" do
+        sign_out
+        sign_in(email: "test2@test.com")
+        visit "/spaces"
+        click_link("nice little room")
+
+        expect(page).not_to have_content("Edit space")
+      end
+
+      scenario "users cannot edit other users' spaces" do
+        space1 = Space.last
+        sign_out
+        sign_in(email: "test2@test.com")
+        visit "/spaces/#{space1.id}/edit"
+        fill_in("Description", with: "Updated description")
+        click_button "Update"
+
+        expect(page).to have_css("div#alert", text: "You cannot update this space")
+        expect(page).not_to have_content("Updated description")
+      end
+
+    end
   end
 
   context "user logged out" do
+    before { Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
+
     context "add new space" do
       scenario "user cannot add a new space if logged out" do
         visit "/"
@@ -86,8 +141,6 @@ feature "spaces" do
     end
 
     context "show space" do
-      before { Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
-
       scenario "user can see the content of a posted space if logged out" do
         space1 = Space.last
         visit "/spaces"
@@ -96,6 +149,15 @@ feature "spaces" do
         expect(current_path).to eq "/spaces/#{space1.id}"
         expect(page).to have_content "nice little room"
         expect(page).to have_content "test"
+      end
+    end
+
+    context "edit space" do
+      scenario "user cannot edit space if logged out" do
+        visit "/spaces"
+        click_link("nice little room")
+
+        expect(page).not_to have_content "Edit space"
       end
     end
   end

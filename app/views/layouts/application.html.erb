@@ -39,13 +39,14 @@
       </div>
       <main class="mdl-layout__content">
         <div class="page-content">
-          <div class="mdl-grid">
+          <div class="mdl-grid" id="notice">
             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
-              <% if notice %>
-                <%= notice %>
-              <% elsif alert %>
-                <%= alert %>
-              <% end %>
+              <%= notice if notice %>
+            </div>
+          </div>
+          <div class="mdl-grid" id="alert">
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
+              <%= alert if alert %>
             </div>
           </div>
           <div class="mdl-grid">
