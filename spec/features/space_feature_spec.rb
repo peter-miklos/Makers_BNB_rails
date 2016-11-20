@@ -70,7 +70,7 @@ feature "spaces" do
         visit "/spaces"
         click_link("nice little room")
 
-        expect(current_path).to eq "/spaces/#{space1.id}/show"
+        expect(current_path).to eq "/spaces/#{space1.id}"
         expect(page).to have_content "nice little room"
         expect(page).to have_content "test"
       end
@@ -93,7 +93,7 @@ feature "spaces" do
         visit "/spaces"
         click_link("nice little room")
 
-        expect(current_path).to eq "/spaces/#{space1.id}/show"
+        expect(current_path).to eq "/spaces/#{space1.id}"
         expect(page).to have_content "nice little room"
         expect(page).to have_content "test"
       end

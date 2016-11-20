@@ -22,6 +22,10 @@ class SpacesController < ApplicationController
     end
   end
 
+  def show
+    @space = Space.find(params[:id])
+  end
+
   private
 
   def space_params
