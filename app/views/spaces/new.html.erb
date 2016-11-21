@@ -22,11 +22,12 @@
   </div>
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
     <label for="available_from" class="mdl-textfield__label"><%= f.label :available_from %></label>
-    <%= f.date_field(:available_from, class: "mdl-textfield__input", type: "date") %>
+    <% date = Time.new%>
+    <%= f.date_field(:available_from, class: "mdl-textfield__input", value: "#{date.year}-#{date.month}-#{date.day}", required: true) %>
   </div>
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
     <label for="available_to" class="mdl-textfield__label"><%= f.label :available_to %></label>
-    <%= f.date_field(:available_to, class: "mdl-textfield__input", type: "date") %>
+    <%= f.date_field(:available_to, class: "mdl-textfield__input", value: "#{date.year}-12-31", required: true) %>
   </div>
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
     <label for="description" class="mdl-textfield__label"><%= f.label :description %></label>

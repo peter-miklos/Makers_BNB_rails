@@ -34,9 +34,11 @@ feature "spaces" do
         expect(current_path).to eq "/spaces"
         expect(page).to have_content("Test apartment")
         expect(page).to have_content(98)
+        expect(page).to have_content("nice apartment available for a weekend")
+
+        click_link("Test apartment")
         expect(page).to have_content("2016.01.01")
         expect(page).to have_content("2016.05.01")
-        expect(page).to have_content("nice apartment available for a weekend")
       end
 
       scenario "user cannot add space w/o price" do
@@ -59,28 +61,6 @@ feature "spaces" do
         click_button("List my space")
 
         expect(page).to have_css("section#errors", text: "Description can't be blank")
-      end
-
-      scenario "user cannot add spec w/o from date" do
-        click_link("Add space")
-        fill_in("Name", with: "Test apartment")
-        fill_in("Price", with: 98)
-        fill_in("Available to", with: "2016-05-01")
-        fill_in("Description", with: "nice apartment available for a weekend")
-        click_button("List my space")
-
-        expect(page).to have_css("section#errors", text: "Available from can't be blank")
-      end
-
-      scenario "user cannot add spec w/o to date" do
-        click_link("Add space")
-        fill_in("Name", with: "Test apartment")
-        fill_in("Price", with: 98)
-        fill_in("Available to", with: "2016-05-01")
-        fill_in("Description", with: "nice apartment available for a weekend")
-        click_button("List my space")
-
-        expect(page).to have_css("section#errors", text: "Available to can't be blank")
       end
 
       scenario "user cannot add spec w/o name" do
