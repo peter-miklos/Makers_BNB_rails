@@ -9,4 +9,10 @@ class Space < ApplicationRecord
   has_many :space_dates, dependent: :destroy
 
   belongs_to :user
+
+  def available_from
+  end
+
+  def available_to
+  end
 end

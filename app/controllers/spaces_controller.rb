@@ -16,6 +16,9 @@ class SpacesController < ApplicationController
     @space.user = current_user
 
     if @space.save
+      (space_date_params["available_from"]..space_date_params["available_to"]).each do |date|
+        SpaceDate.create(date: date, status: "open", space_id: @space.id)
+      end
       redirect_to spaces_path, notice: "Space successfully added"
     else
       render "new"
@@ -24,6 +27,7 @@ class SpacesController < ApplicationController
 
   def show
     @space = Space.find(params[:id])
+    @space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
   end
 
   def edit
@@ -44,5 +48,9 @@ class SpacesController < ApplicationController
 
   def space_params
     params.require(:space).permit(:name, :price, :description)
+  end
+
+  def space_date_params
+    params.require(:space).permit(:available_from, :available_to)
   end
 end

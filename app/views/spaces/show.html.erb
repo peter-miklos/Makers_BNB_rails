@@ -14,6 +14,12 @@
       <td><strong>Description</strong></td>
       <td><%= @space.description %></td>
     </tr>
+    <tr>
+      <td><strong>Available days:</strong></td>
+      <td>
+        <%= @space_dates.map{ |space_date| space_date.date }.join(" | ")%>
+      </td>
+    </tr>
   </tbody>
 </table>
 <div class="">
