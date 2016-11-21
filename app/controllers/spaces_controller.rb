@@ -27,6 +27,7 @@ class SpacesController < ApplicationController
 
   def show
     @space = Space.find(params[:id])
+    @space_dates = Space.where(:space_id => params[:id])
   end
 
   def edit
