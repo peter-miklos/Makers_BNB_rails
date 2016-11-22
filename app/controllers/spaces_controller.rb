@@ -27,7 +27,8 @@ class SpacesController < ApplicationController
 
   def show
     @space = Space.find(params[:id])
-    @space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
+    @owner = User.find(@space.user_id)
+    @available_space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
   end
 
   def edit
