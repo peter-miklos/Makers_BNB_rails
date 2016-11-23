@@ -1,0 +1,30 @@
+<h4>My received requests</h4>
+<p>TBD</p>
+<h4>My sent requests</h4>
+<% if @my_sent_requests.any? %>
+  <table class="spaceListTable mdl-js-data-table mdl-shadow--2dp" id="my_sent_requests">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th class="mdl-data-table__cell--non-numeric">Name</th>
+        <th>Price</th>
+        <th class="mdl-data-table__cell--non-numeric">My message</th>
+        <th class="mdl-data-table__cell--non-numeric">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @my_sent_requests.each.with_index do |request, index| %>
+      <% space = @all_spaces.find { |space| space.id == request.space_id }%>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= link_to space.name, space_path(space) %></td>
+          <td><%= space.price %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= request.message %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= request.status %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  No sent requests found.
+<% end %>

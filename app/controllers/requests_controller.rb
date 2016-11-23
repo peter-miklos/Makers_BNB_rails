@@ -24,6 +24,7 @@ class RequestsController < ApplicationController
     @space = Space.find(params[:space_id])
     @request = @space.requests.new(request_params)
     @request.user = current_user
+    @request.status = "open"
 
     if @request.save
       redirect_to my_requests_path

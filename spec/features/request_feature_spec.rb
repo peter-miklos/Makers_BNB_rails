@@ -24,8 +24,8 @@ feature "request" do
         fill_in("Message", with: "I want to go there")
         click_button "Submit"
 
-        expect(page).to have_content(user2.email)
-        expect(page).to have_content("I want to go there")
+        expect(page).to have_css("table#my_sent_requests", text: "open")
+        expect(page).to have_css("table#my_sent_requests", text: "I want to go there")
       end
 
       scenario "users cannot see add request link at their own spaces" do
