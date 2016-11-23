@@ -4,18 +4,7 @@ class SpacesController < ApplicationController
   before_action :authenticate_user!, :except => [:index, :show]
 
   def index
-    if params[:search_date]
-      space_dates = SpaceDate.where(date: params[:search_date], status: "open")
-      space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
-      @spaces = Space.where(id: space_ids)
-      @search_date = params[:search_date].to_date
-    else
-      current_date = Time.new
-      space_dates = SpaceDate.all
-      space_dates = space_dates.select { |space_date| space_date.date >= current_date.strftime("%F").to_date}
-      space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
-      @spaces = Space.where(id: space_ids)
-    end
+    create_list_of_spaces
   end
 
   def new
