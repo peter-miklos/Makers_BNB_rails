@@ -185,6 +185,16 @@ feature "spaces" do
         expect(page).to have_content "nice little room"
         expect(page).to have_content "99"
       end
+
+      scenario "user cannot search for historical date" do
+        visit "/"
+        click_link "Spaces"
+        fill_in("search_date_field", with: "2010-01-02")
+        click_button "space_search_button"
+
+        expect(current_path).to eq "/spaces"
+        expect(page).to have_css("div#alert", text: "Date cannot be in the past")
+      end
     end
   end
 
