@@ -25,6 +25,6 @@
 <div class="">
   <% if (current_user && current_user.id == @space.user_id)%>
     <%= link_to "Edit space", edit_space_path(@space) %>
-    <%= link_to "Back to list", spaces_path %>
   <% end %>
+  <%= link_to "Back to list", spaces_path %>
 </div>

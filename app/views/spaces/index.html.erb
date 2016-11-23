@@ -1,13 +1,13 @@
 <% if @search_date %>
-  <h4>Available spaces on <%= @search_date.strftime("%A, %d/%m/%Y") %></h4>
+  <h4>Available spaces on <%= @search_date.to_date.strftime("%A, %d/%m/%Y") %></h4>
 <% else %>
 <h4>All available spaces</h4>
 <% end %>
 <div class="mdl-grid">
   <%= form_tag(spaces_path, :method => "get", id: "search_date_form") do %>
-    <%= date_field_tag :search_date, params[:search], class: "searchBox", id: "search_date_field", required: true, value: @search_date_string %>
+    <%= date_field_tag :search_date, params[:search], class: "searchBox", id: "search_date_field", required: true, value: @search_date %>
     <%= submit_tag "Search", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent", id: "space_search_button" %>
-    <%= link_to " Show all", "/spaces" %>
+    <%= link_to " Show all", "/spaces?type=all" %>
   <% end %>
 </div>
 <% if @spaces.any? %>
