@@ -18,6 +18,9 @@ feature "spaces" do
     before do
       sign_in
       Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id)
+      space1 = Space.last
+      SpaceDate.create(date: "2016-11-01", status: "open", space_id: space1.id)
+      SpaceDate.create(date: "2016-11-02", status: "booked", space_id: space1.id)
     end
 
     context "add new space" do
@@ -76,7 +79,7 @@ feature "spaces" do
 
     end
 
-    context "show space" do
+    context "show space details" do
       scenario "user can see the details of a space if logged in" do
         space1 = Space.last
         visit "/spaces"
@@ -88,15 +91,11 @@ feature "spaces" do
       end
 
       scenario "user can see the non-booked dates only at spaces/show" do
-        space1 = Space.last
-        SpaceDate.create(date: "2016-11-01", status: "open", space_id: space1.id)
-        SpaceDate.create(date: "2016-11-02", status: "booked", space_id: space1.id)
-
         visit "/spaces"
         click_link("nice little room")
 
         expect(page).to have_content("2016-11-01")
-        expect(page).not_to have_content("2016-11-02")        
+        expect(page).not_to have_content("2016-11-02")
       end
     end
 
@@ -151,6 +150,38 @@ feature "spaces" do
         expect(page).not_to have_content("Updated description")
       end
 
+    end
+
+    context "search available spaces" do
+      scenario "only those spaces are shown that are available on the specified date" do
+        visit "/"
+        click_link "Spaces"
+        fill_in("Search date", with: "2016-11-01")
+
+        expect(page).to have_content "nice little room"
+        expect(page).to have_content "99"
+      end
+
+      scenario "user is informed if there is no space available on the specified date" do
+        visit "/"
+        click_link "Spaces"
+        fill_in("Search date", with: "2016-11-02")
+
+        expect(page).to have_content "No space found"
+        expect(page).not_to have_content "nice little room"
+        expect(page).not_to have_content "99"
+      end
+
+      scenario "all available spaces shown on request" do
+        visit "/"
+        click_link "Spaces"
+        fill_in("Search date", with: "2016-11-02")
+        expect(page).to have_content "No space found"
+
+        click_link "Show all"
+        expect(page).to have_content "nice little room"
+        expect(page).to have_content "99"
+      end
     end
   end
 
