@@ -8,4 +8,6 @@ Rails.application.routes.draw do
     resources :requests
     resources :bookings
   end
+
+  resources :my_requests
 end

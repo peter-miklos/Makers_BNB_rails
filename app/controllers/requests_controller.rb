@@ -26,7 +26,7 @@ class RequestsController < ApplicationController
     @request.user = current_user
 
     if @request.save
-      redirect_to space_path(@space)
+      redirect_to my_requests_path
     else
       render "new"
     end
