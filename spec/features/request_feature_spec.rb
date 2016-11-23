@@ -53,6 +53,26 @@ feature "request" do
         expect(page).to have_css("div#alert", text: "You've already created a request")
       end
     end
+
+    context "show my received requests" do
+      scenario "shows the received requests" do
+        sign_out
+        sign_in(email: "test2@test.com")
+        visit "/"
+        click_link "Spaces"
+        click_link "nice little room"
+        click_link "Add request"
+        fill_in("Message", with: "I want to go there")
+        click_button "Submit"
+        sign_out
+        sign_in
+        visit "My requests"
+
+        expect(page).to have_css("table#my_received_requests", text: "I want to go there")
+        expect(page).to have_css("table#my_received_requests", text: "99")
+        expect(page).not_to have_css("table#my_sent_requests", text: "I want to go there")
+      end
+    end
   end
 
   context "user logged out" do
