@@ -5,7 +5,7 @@ class SpacesController < ApplicationController
 
   def index
     if params[:search_date]
-      space_dates = SpaceDate.where(date: params[:search_date])
+      space_dates = SpaceDate.where(date: params[:search_date], status: "open")
       space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
       @spaces = Space.where(id: space_ids)
       @search_date = params[:search_date].to_date

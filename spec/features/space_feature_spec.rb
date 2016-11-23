@@ -166,8 +166,10 @@ feature "spaces" do
         visit "/"
         click_link "Spaces"
         fill_in("search_date_field", with: "2116-11-02")
+        click_button "space_search_button"
 
-        expect(page).to have_content "No space found"
+        expect(page).to have_content("Available spaces on Monday, 02/11/2116")
+        expect(page).to have_content "No spaces found"
         expect(page).not_to have_content "nice little room"
         expect(page).not_to have_content "99"
       end
@@ -176,7 +178,8 @@ feature "spaces" do
         visit "/"
         click_link "Spaces"
         fill_in("search_date_field", with: "2116-11-02")
-        expect(page).to have_content "No space found"
+        click_button "space_search_button"
+        expect(page).to have_content "No spaces found"
 
         click_link "Show all"
         expect(page).to have_content "nice little room"
@@ -186,7 +189,12 @@ feature "spaces" do
   end
 
   context "user logged out" do
-    before { Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
+    before do
+      Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id)
+      space1 = Space.last
+      SpaceDate.create(date: "2116-11-01", status: "open", space_id: space1.id)
+      SpaceDate.create(date: "2116-11-02", status: "booked", space_id: space1.id)
+    end
 
     context "add new space" do
       scenario "user cannot add a new space if logged out" do
