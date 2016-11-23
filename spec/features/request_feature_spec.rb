@@ -21,7 +21,7 @@ feature "request" do
         expect(page).to have_content "Add request"
 
         click_link "Add request"
-        fill_in("message", with: "I want to go there")
+        fill_in("Message", with: "I want to go there")
         click_button "Submit"
 
         expect(page).to have_content(user2.email)
@@ -33,7 +33,7 @@ feature "request" do
         click_link "Spaces"
         click_link "nice little room"
 
-        expect(page).not_to find_link("Add request")
+        expect(page).not_to have_content("Add request")
       end
 
       scenario "user cannot add request to a space more than once" do
@@ -43,13 +43,14 @@ feature "request" do
         click_link "Spaces"
         click_link "nice little room"
         click_link "Add request"
-        fill_in("message", with: "I want to go there")
+        fill_in("Message", with: "I want to go there")
         click_button "Submit"
         visit "/"
         click_link "Spaces"
         click_link "nice little room"
+        click_link "Add request"
 
-        expect(page).not_to find_link "Add request"
+        expect(page).to have_css("div#alert", text: "You've already created a request")
       end
     end
   end
