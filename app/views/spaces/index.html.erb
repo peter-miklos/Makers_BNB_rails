@@ -25,7 +25,7 @@
         <tr>
           <td><%= index + 1 %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= link_to space.name, space_path(space) %></td>
-          <td><%= space.price %></td>
+          <td>$<%= space.price %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= space.description %></td>
         </tr>
       <% end %>

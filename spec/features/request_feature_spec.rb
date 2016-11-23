@@ -79,7 +79,7 @@ feature "request" do
 
         expect(page).not_to have_css("table#my_sent_requests", text: "I like your place")
         expect(page).to have_css("table#my_received_requests", text: "I like your place")
-        expect(page).to have_css("table#my_received_requests", text: "99")
+        expect(page).to have_css("table#my_received_requests", text: "$99")
       end
     end
 
@@ -104,7 +104,7 @@ feature "request" do
         expect(page).not_to have_content "No sent requests"
         expect(page).to have_css("table#my_sent_requests", text: "I like your place")
         expect(page).to have_css("table#my_sent_requests", text: "open")
-        expect(page).to have_css("table#my_sent_requests", text: "99")
+        expect(page).to have_css("table#my_sent_requests", text: "$99")
       end
     end
   end
