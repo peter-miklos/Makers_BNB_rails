@@ -70,7 +70,8 @@ feature "request" do
       scenario "user cannot add a request if logged out" do
         visit "/spaces/#{space1.id}/requests/new"
 
-        expect(page).to have_content("no permission")
+        expect(page).to have_content("You need to sign in or sign up before continuing.")
+        expect(current_path).to eq "/users/sign_in"
       end
 
     end
