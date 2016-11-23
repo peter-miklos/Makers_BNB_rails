@@ -1,14 +1,14 @@
-<h4>Show space</h4>
+<h4><%= @space.name %></h4>
 
 <table class="showSpaceTable">
   <tbody>
     <tr>
-      <td><strong>Name</strong></td>
-      <td><%= @space.name %></td>
+      <td><strong>Price</strong></td>
+      <td>$<%= @space.price %> per night</td>
     </tr>
     <tr>
-      <td><strong>Price</strong></td>
-      <td>$ <%= @space.price %></td>
+      <td><strong>Owner</strong></td>
+      <td><a href="mailto:<%= @owner.email %>"><%= @owner.email %></td>
     </tr>
     <tr>
       <td><strong>Description</strong></td>
@@ -17,7 +17,7 @@
     <tr>
       <td><strong>Available days:</strong></td>
       <td>
-        <%= @space_dates.map{ |space_date| space_date.date }.join(" | ")%>
+        <%= @available_space_dates.map{ |space_date| space_date.date }.join(" | ")%>
       </td>
     </tr>
   </tbody>

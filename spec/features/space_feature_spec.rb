@@ -18,6 +18,9 @@ feature "spaces" do
     before do
       sign_in
       Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id)
+      space1 = Space.last
+      SpaceDate.create(date: "2116-11-01", status: "open", space_id: space1.id)
+      SpaceDate.create(date: "2116-11-02", status: "booked", space_id: space1.id)
     end
 
     context "add new space" do
@@ -26,8 +29,8 @@ feature "spaces" do
         click_link("Add space")
         fill_in("Name", with: "Test apartment")
         fill_in("Price", with: 98)
-        fill_in("Available from", with: "2016-01-01")
-        fill_in("Available to", with: "2016-05-01")
+        fill_in("Available from", with: "2116-01-01")
+        fill_in("Available to", with: "2116-05-01")
         fill_in("Description", with: "nice apartment available for a weekend")
         click_button("List my space")
 
@@ -37,15 +40,15 @@ feature "spaces" do
         expect(page).to have_content("nice apartment available for a weekend")
 
         click_link("Test apartment")
-        expect(page).to have_content("2016-01-01")
-        expect(page).to have_content("2016-05-01")
+        expect(page).to have_content("2116-01-01")
+        expect(page).to have_content("2116-05-01")
       end
 
       scenario "user cannot add space w/o price" do
         click_link("Add space")
         fill_in("Name", with: "Test apartment")
-        fill_in("Available from", with: "2016-01-01")
-        fill_in("Available to", with: "2016-05-01")
+        fill_in("Available from", with: "2116-01-01")
+        fill_in("Available to", with: "2116-05-01")
         fill_in("Description", with: "nice apartment available for a weekend")
         click_button("List my space")
 
@@ -56,8 +59,8 @@ feature "spaces" do
         click_link("Add space")
         fill_in("Name", with: "Test apartment")
         fill_in("Price", with: 98)
-        fill_in("Available from", with: "2016-01-01")
-        fill_in("Available to", with: "2016-05-01")
+        fill_in("Available from", with: "2116-01-01")
+        fill_in("Available to", with: "2116-05-01")
         click_button("List my space")
 
         expect(page).to have_css("section#errors", text: "Description can't be blank")
@@ -66,8 +69,8 @@ feature "spaces" do
       scenario "user cannot add spec w/o name" do
         click_link("Add space")
         fill_in("Price", with: 98)
-        fill_in("Available from", with: "2016-01-01")
-        fill_in("Available to", with: "2016-05-01")
+        fill_in("Available from", with: "2116-01-01")
+        fill_in("Available to", with: "2116-05-01")
         fill_in("Description", with: "nice apartment available for a weekend")
         click_button("List my space")
 
@@ -76,7 +79,7 @@ feature "spaces" do
 
     end
 
-    context "show space" do
+    context "show space details" do
       scenario "user can see the details of a space if logged in" do
         space1 = Space.last
         visit "/spaces"
@@ -88,15 +91,11 @@ feature "spaces" do
       end
 
       scenario "user can see the non-booked dates only at spaces/show" do
-        space1 = Space.last
-        SpaceDate.create(date: "2016-11-01", status: "open", space_id: space1.id)
-        SpaceDate.create(date: "2016-11-02", status: "booked", space_id: space1.id)
-
         visit "/spaces"
         click_link("nice little room")
 
-        expect(page).to have_content("2016-11-01")
-        expect(page).not_to have_content("2016-11-02")        
+        expect(page).to have_content("2116-11-01")
+        expect(page).not_to have_content("2116-11-02")
       end
     end
 
@@ -152,10 +151,50 @@ feature "spaces" do
       end
 
     end
+
+    context "search available spaces" do
+      scenario "only those spaces are shown that are available on the specified date" do
+        visit "/"
+        click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+
+        expect(page).to have_content "nice little room"
+        expect(page).to have_content "99"
+      end
+
+      scenario "user is informed if there is no space available on the specified date" do
+        visit "/"
+        click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-02")
+        click_button "space_search_button"
+
+        expect(page).to have_content("Available spaces on Monday, 02/11/2116")
+        expect(page).to have_content "No spaces found"
+        expect(page).not_to have_content "nice little room"
+        expect(page).not_to have_content "99"
+      end
+
+      scenario "all available spaces shown on request" do
+        visit "/"
+        click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-02")
+        click_button "space_search_button"
+        expect(page).to have_content "No spaces found"
+
+        click_link "Show all"
+        expect(page).to have_content "nice little room"
+        expect(page).to have_content "99"
+      end
+    end
   end
 
   context "user logged out" do
-    before { Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
+    before do
+      Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id)
+      space1 = Space.last
+      SpaceDate.create(date: "2116-11-01", status: "open", space_id: space1.id)
+      SpaceDate.create(date: "2116-11-02", status: "booked", space_id: space1.id)
+    end
 
     context "add new space" do
       scenario "user cannot add a new space if logged out" do

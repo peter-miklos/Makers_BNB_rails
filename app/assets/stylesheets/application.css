@@ -14,11 +14,25 @@
  *= require_self
  */
 
+.spaceListTable {
+  position: relative;
+  border: 1px solid rgba(0,0,0,.12);
+  border-collapse: collapse;
+  border-spacing: 2px;
+  width: 100%;
+  white-space: wrap;
+  font-family: 'Roboto','Helvetica','Arial',sans-serif!important;
+  font-size: 13px;
+}
 
-html>body {
-    font-family: 'Roboto','Helvetica','Arial',sans-serif!important;
-    background-color: #FAFAFA;
-};
+tr {
+  border: 1px solid rgba(0,0,0,.12);
+}
+
+tr > td {
+  padding: 5px;
+  padding-left: 10px;
+}
 
 .showSpaceTable {
      display: table;
@@ -31,4 +45,10 @@ html>body {
        border-right-color: grey;
        border-bottom-color: grey;
        border-left-color: grey;
+}
+
+.searchBox {
+  height:30px;
+  font-family: 'Roboto','Helvetica','Arial',sans-serif!important;
+  font-size:14px;
 }

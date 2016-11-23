@@ -4,7 +4,18 @@ class SpacesController < ApplicationController
   before_action :authenticate_user!, :except => [:index, :show]
 
   def index
-    @spaces = Space.all
+    if params[:search_date]
+      space_dates = SpaceDate.where(date: params[:search_date], status: "open")
+      space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
+      @spaces = Space.where(id: space_ids)
+      @search_date = params[:search_date].to_date
+    else
+      current_date = Time.new
+      space_dates = SpaceDate.all
+      space_dates = space_dates.select { |space_date| space_date.date >= current_date.strftime("%F").to_date}
+      space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
+      @spaces = Space.where(id: space_ids)
+    end
   end
 
   def new
@@ -27,7 +38,8 @@ class SpacesController < ApplicationController
 
   def show
     @space = Space.find(params[:id])
-    @space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
+    @owner = User.find(@space.user_id)
+    @available_space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
   end
 
   def edit
