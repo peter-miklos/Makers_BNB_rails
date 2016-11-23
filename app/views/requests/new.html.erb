@@ -35,12 +35,12 @@
     <div class="">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <label for="message" class="mdl-textfield__label"><%= r.label :message %></label>
-        <%= r.text_area(:message, class: "mdl-textfield__input") %>
+        <%= r.text_area(:message, class: "mdl-textfield__input", rows: "6") %>
       </div>
     </div>
     <div>
       <%= r.submit "Submit", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" %>
-      <%= link_to "Cancel", space_request_path(@space) %>
+      <%= link_to "Cancel", space_path(@space) %>
     </div>
   <% end %>
 </div>
