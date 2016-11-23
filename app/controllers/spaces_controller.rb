@@ -12,11 +12,13 @@ class SpacesController < ApplicationController
       space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
       @spaces = Space.where(id: space_ids)
       @search_date = params[:search_date].to_date
+      @search_date_string = params[:search_date]
     else
       space_dates = SpaceDate.where(status: "open")
       space_dates = space_dates.select { |sd| sd.date >= current_date.to_date}
       space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
       @spaces = Space.where(id: space_ids)
+      @search_date_string = ""
     end
   end
 

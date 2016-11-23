@@ -5,7 +5,7 @@
 <% end %>
 <div class="mdl-grid">
   <%= form_tag(spaces_path, :method => "get", id: "search_date_form") do %>
-    <%= date_field_tag :search_date, params[:search], class: "searchBox", id: "search_date_field", required: true %>
+    <%= date_field_tag :search_date, params[:search], class: "searchBox", id: "search_date_field", required: true, value: @search_date_string %>
     <%= submit_tag "Search", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent", id: "space_search_button" %>
     <%= link_to " Show all", "/spaces" %>
   <% end %>
