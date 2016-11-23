@@ -1,0 +1,46 @@
+<h4>Add new request</h4>
+
+<% if @request.errors.any? %>
+ <section id="errors" >
+   <h2> <%= pluralize(@request.errors.count, "error") %> prohibited this request from being saved: </h2>
+   <ul>
+     <% @request.errors.full_messages.each do |message| %>
+       <li><%= message %></li>
+     <% end %>
+   </ul>
+ </section>
+<% end %>
+
+<div class="" id="space_details">
+  <table class="showSpaceTable">
+    <tbody>
+      <tr>
+        <td><strong>Price</strong></td>
+        <td>$<%= @space.price %> per night</td>
+      </tr>
+      <tr>
+        <td><strong>Owner</strong></td>
+        <td><a href="mailto:<%= @owner.email %>"><%= @owner.email %></td>
+      </tr>
+      <tr>
+        <td><strong>Description</strong></td>
+        <td><%= @space.description %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="" id="new_request_form">
+  <%= form_for [@space, @request] do |r| %>
+    <div class="">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <label for="message" class="mdl-textfield__label"><%= r.label :message %></label>
+        <%= r.text_area(:message, class: "mdl-textfield__input") %>
+      </div>
+    </div>
+    <div>
+      <%= r.submit "Submit", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" %>
+      <%= link_to "Cancel", space_request_path(@space) %>
+    </div>
+  <% end %>
+</div>
