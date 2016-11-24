@@ -52,3 +52,19 @@ tr > td {
   font-family: 'Roboto','Helvetica','Arial',sans-serif!important;
   font-size:14px;
 }
+
+footer a:link {
+    color: rgb(158,158,158);
+}
+
+footer a:visited {
+    color: rgb(158,158,158);
+}
+
+footer a:hover {
+    color: rgb(158,158,158);
+}
+
+footer a:active {
+    color: rgb(158,158,158);
+}
