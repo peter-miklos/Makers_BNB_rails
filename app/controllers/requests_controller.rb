@@ -8,10 +8,13 @@ class RequestsController < ApplicationController
 
   def new
     @space = Space.find(params[:space_id])
-    redirect_to space_path(@space), alert: "You cannot create a request without choosing a date" unless session[:search_date]
-    @owner = User.find(@space.user_id)
-    @request_date = session[:search_date]
-    render_new_request_view
+    if session[:search_date]
+      @owner = User.find(@space.user_id)
+      @request_date = session[:search_date]
+      render_new_request_view
+    else
+      redirect_to space_path(@space), alert: "You cannot create a request without choosing a date" and return
+    end
   end
 
   def create
