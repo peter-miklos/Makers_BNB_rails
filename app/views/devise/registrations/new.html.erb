@@ -17,7 +17,7 @@
       <% else %>
         <% pwd_min_length = "" %>
       <% end %>
-      <label for="password" class="mdl-textfield__label"><%= f.label :"password #{pwd_min_length}" %></label>
+      <label for="password" class="mdl-textfield__label"><%= f.label :password %><small> <%= pwd_min_length %></small></label>
       <%= f.password_field(:password, class: "mdl-textfield__input", autocomplete: "off") %>
     </div>
   </div>
