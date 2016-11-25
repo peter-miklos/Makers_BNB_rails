@@ -5,7 +5,8 @@
       <tr>
         <th>#</th>
         <th class="mdl-data-table__cell--non-numeric">Name</th>
-        <th>Price</th>
+        <th class="mdl-data-table__cell--non-numeric">Price</th>
+        <th class="mdl-data-table__cell--non-numeric">Date</th>
         <th class="mdl-data-table__cell--non-numeric">My message</th>
         <th class="mdl-data-table__cell--non-numeric">Action/status</th>
       </tr>
@@ -17,6 +18,7 @@
           <td><%= index + 1 %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= link_to space.name, space_path(space) %></td>
           <td>$<%= space.price %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= @all_received_request_dates.find { |date| date.request_id == request.id }.date.to_date.strftime("%d/%m/%Y")%></td>
           <td class="mdl-data-table__cell--non-numeric"><%= request.message %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= request.status %></td>
         </tr>
@@ -35,6 +37,7 @@
         <th>#</th>
         <th class="mdl-data-table__cell--non-numeric">Name</th>
         <th>Price</th>
+        <th class="mdl-data-table__cell--non-numeric">Date</th>
         <th class="mdl-data-table__cell--non-numeric">My message</th>
         <th class="mdl-data-table__cell--non-numeric">Status</th>
       </tr>
@@ -46,6 +49,7 @@
           <td><%= index + 1 %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= link_to space.name, space_path(space) %></td>
           <td>$<%= space.price %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= @all_sent_request_dates.find { |date| date.request_id == request.id }.date.to_date.strftime("%d/%m/%Y")%></td>
           <td class="mdl-data-table__cell--non-numeric"><%= request.message %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= request.status %></td>
         </tr>

@@ -11,7 +11,9 @@ module RequestsHelper
   end
 
   def complete_request_creation
-    if @request.save then redirect_to my_requests_path
+    if @request.save
+      RequestDate.create(date: session[:search_date], request_id: @request.id)
+      redirect_to my_requests_path
     else render "new"
     end
   end
