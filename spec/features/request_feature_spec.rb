@@ -11,21 +11,37 @@ feature "request" do
     before {sign_in}
 
     context "create request" do
-      scenario "users can add request to other users' spaces" do
+      scenario "users can add request to other users' spaces after choosing a date" do
         sign_out
         sign_in(email: "test2@test.com")
         visit "/"
         click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
         click_link "nice little room"
 
         expect(page).to have_content "Add request"
 
         click_link "Add request"
+
+        expect(page).to have_content "Sunday, 01/11/2116"
         fill_in("Message", with: "I want to go there")
         click_button "Submit"
 
         expect(page).to have_css("table#my_sent_requests", text: "open")
         expect(page).to have_css("table#my_sent_requests", text: "I want to go there")
+      end
+
+      scenario "user cannot add a request if no date is choosen" do
+        sign_out
+        sign_in(email: "test2@test.com")
+        visit "/"
+        click_link "Spaces"
+        click_link "nice little room"
+        click_link "Add request"
+
+        expect(current_path).to eq("/spaces/#{space1.id}")
+        expect(page).to have_css("div#alert", text: "You cannot create a request without choosing a date")
       end
 
       scenario "users cannot see add request link at their own spaces" do
@@ -41,12 +57,16 @@ feature "request" do
         sign_in(email: "test2@test.com")
         visit "/"
         click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
         click_link "nice little room"
         click_link "Add request"
         fill_in("Message", with: "I want to go there")
         click_button "Submit"
         visit "/"
         click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
         click_link "nice little room"
         click_link "Add request"
 
@@ -69,6 +89,8 @@ feature "request" do
 
       scenario "shows the received requests" do
         click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
         click_link "nice little room"
         click_link "Add request"
         fill_in("Message", with: "I like your place")
@@ -91,10 +113,12 @@ feature "request" do
         expect(page).to have_content "No sent requests found"
       end
 
-      scenario "shows the sent requests" do
+      scenario "shows the available sent requests" do
         sign_out
         sign_in(email: "test2@test.com")
         click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
         click_link "nice little room"
         click_link "Add request"
         fill_in("Message", with: "I like your place")

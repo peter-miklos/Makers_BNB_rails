@@ -15,6 +15,10 @@
   <table class="showSpaceTable">
     <tbody>
       <tr>
+        <td><strong>Date</strong></td>
+        <td><%= @request_date.to_date.strftime("%A, %d/%m/%Y") %></td>
+      </tr>
+      <tr>
         <td><strong>Price</strong></td>
         <td>$<%= @space.price %> per night</td>
       </tr>
