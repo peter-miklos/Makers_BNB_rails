@@ -6,6 +6,7 @@ feature "request" do
   let!(:space1){ Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
   let!(:date1) { SpaceDate.create(date: "2116-11-01", status: "open", space_id: space1.id) }
   let!(:date2) { SpaceDate.create(date: "2116-11-02", status: "booked", space_id: space1.id) }
+  let!(:date3) { SpaceDate.create(date: "2116-11-03", status: "open", space_id: space1.id) }
 
   context "user logged in" do
     before {sign_in}
@@ -32,6 +33,28 @@ feature "request" do
         expect(page).to have_css("table#my_sent_requests", text: "I want to go there")
       end
 
+      scenario "users can add request to an already requested space, but for another date" do
+        sign_out
+        sign_in(email: "test2@test.com")
+        visit "/"
+        click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
+        click_link "nice little room"
+        click_link "Add request"
+        fill_in("Message", with: "I want to go there")
+        click_button "Submit"
+        click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-03")
+        click_button "space_search_button"
+        click_link "nice little room"
+        click_link "Add request"
+        fill_in("Message", with: "I want to go there again")
+        click_button "Submit"
+        expect(page).to have_css("table#my_sent_requests", text: "open")
+        expect(page).to have_css("table#my_sent_requests", text: "I want to go there again")
+      end
+
       scenario "user cannot add a request if no date is choosen" do
         sign_out
         sign_in(email: "test2@test.com")
@@ -52,7 +75,7 @@ feature "request" do
         expect(page).not_to have_content("Add request")
       end
 
-      scenario "user cannot add request to a space more than once" do
+      scenario "user cannot add request to a space for a specific date more than once" do
         sign_out
         sign_in(email: "test2@test.com")
         visit "/"
