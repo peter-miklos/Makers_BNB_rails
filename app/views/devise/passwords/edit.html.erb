@@ -1,24 +1,30 @@
-<h2>Change your password</h2>
+<h3>Change your password</h3>
 
 <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
   <%= devise_error_messages! %>
   <%= f.hidden_field :reset_password_token %>
 
   <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "off" %>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <% if @minimum_password_length %>
+        <% pwd_min_length = "(#{@minimum_password_length} characters minimum)" %>
+      <% else %>
+        <% pwd_min_length = "" %>
+      <% end %>
+      <label for="password" class="mdl-textfield__label"><%= f.label :password %><small> <%= pwd_min_length %></small></label>
+      <%= f.password_field(:password, class: "mdl-textfield__input", autocomplete: "off", autofocus: true) %>
+    </div>
   </div>
 
   <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <label for="password_confirmation" class="mdl-textfield__label"><%= f.label :password_confirmation %></label>
+      <%= f.password_field(:password_confirmation, class: "mdl-textfield__input", autocomplete: "off") %>
+    </div>
   </div>
 
   <div class="actions">
-    <%= f.submit "Change my password" %>
+    <%= f.submit "Change my password", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" %>
   </div>
 <% end %>
 

@@ -29,6 +29,5 @@
   <% if (current_user && current_user.id != @space.user_id)%>
     <%= link_to "Add request", new_space_request_path(@space) %> |
   <% end %>
-  <%= link_to "Go to spaces", spaces_path %> |
-  <%= link_to "Go to my requests", my_requests_path %>
+  <%= link_to "Back", :back %>
 </div>

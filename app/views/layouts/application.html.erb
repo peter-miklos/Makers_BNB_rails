@@ -17,21 +17,26 @@
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
-          <span class="mdl-layout-title">Makers BNB</span>
+          <span class="mdl-layout-title" id="brand_1">Makers BNB</span>
           <div class="mdl-layout-spacer"></div>
           <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link" href="#">Link</a>
+            <% if user_signed_in?%>
+              <i class="material-icons">account_circle</i><a class="mdl-navigation__link" href="/users/edit"><%= current_user.email%></a>
+            <% else %>
+              Guest
+            <% end %>
           </nav>
         </div>
       </header>
       <div class="mdl-layout__drawer" id="menu">
-        <span class="mdl-layout-title logo">Makers BNB</span>
+        <span class="mdl-layout-title logo" id="brand_2">Makers BNB</span>
         <nav class="mdl-navigation">
           <a class="mdl-navigation__link" href="/">Home</a>
           <a class="mdl-navigation__link" href="/spaces">Spaces</a>
           <% if user_signed_in? %>
             <a class="mdl-navigation__link" href="/my_requests">My requests</a>
             <a class="mdl-navigation__link" href="/spaces/new">Add space</a>
+            <a class="mdl-navigation__link" href="/users/edit"><%= current_user.email%></a>
             <a class="mdl-navigation__link" href="/users/sign_out" data-method="delete">Sign out</a>
           <% else %>
             <a class="mdl-navigation__link" href="/users/sign_up">Sign up</a>
@@ -41,16 +46,20 @@
       </div>
       <main class="mdl-layout__content">
         <div class="page-content">
-          <div class="" id="notice">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
-              <%= notice if notice %>
+          <% if notice %>
+          <div class="field" id="notice">
+            <div class="msg msg-success msg-success-text">
+              <%= notice %>
             </div>
           </div>
-          <div class="" id="alert">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
-              <%= alert if alert %>
+          <% end %>
+          <% if alert %>
+          <div class="field" id="alert">
+            <div class="msg msg-danger msg-danger-text">
+              <%= alert %>
             </div>
           </div>
+          <% end %>
           <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
               <%= yield %>
@@ -58,6 +67,11 @@
           </div>
         </div>
       </main>
+      <footer class="mdl-mini-footer">
+        <div class="mdl-mini-footer__left-section">
+          <div>&#169; <a href="http://www.github.com/peter-miklos"> Peter Miklos</a></div>
+        </div>
+      </footer>
     </div>
   </body>
 </html>

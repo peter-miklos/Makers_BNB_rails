@@ -7,7 +7,7 @@
   <%= form_tag(spaces_path, :method => "get", id: "search_date_form") do %>
     <%= date_field_tag :search_date, params[:search], class: "searchBox", id: "search_date_field", required: true, value: @search_date %>
     <%= submit_tag "Search", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent", id: "space_search_button" %>
-    <%= link_to " Show all", "/spaces?type=all" %>
+    <%= link_to " Show all", "/spaces?filter=all" %>
   <% end %>
 </div>
 <% if @spaces.any? %>

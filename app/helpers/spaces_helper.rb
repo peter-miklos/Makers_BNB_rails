@@ -4,12 +4,8 @@ module SpacesHelper
     current_date = Time.new.strftime("%F")
     if wrong_date_searched?(current_date)
       redirect_to spaces_path, alert: "Date cannot be in the past"
-    elsif search_date_used?
-      search_date = params[:search_date] ? params[:search_date] : session[:sds]
-      show_spaces_on_date(search_date)
-      session[:sds] = search_date
-    else
-      show_all_spaces(current_date)
+    elsif search_date_used? then show_spaces_on_date
+    else show_all_spaces(current_date)
     end
   end
 
@@ -20,17 +16,19 @@ module SpacesHelper
   end
 
   def search_date_used?
-    (params[:search_date] || session[:sds]) && !params[:type]
+    (params[:search_date] || session[:search_date]) && !params[:filter]
   end
 
-  def show_spaces_on_date(search_date)
+  def show_spaces_on_date
+    search_date = params[:search_date] ? params[:search_date] : session[:search_date]
     space_dates = SpaceDate.where(date: search_date, status: "open")
     show_spaces(space_dates)
     @search_date = search_date
+    session[:search_date] = search_date
   end
 
   def show_all_spaces(current_date)
-    session[:sds] = nil
+    session[:search_date] = nil
     space_dates = SpaceDate.where(status: "open")
     space_dates = space_dates.select { |sd| sd.date >= current_date.to_date}
     show_spaces(space_dates)
