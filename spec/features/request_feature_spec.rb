@@ -24,7 +24,7 @@ feature "request" do
 
         click_link "Add request"
 
-        expect(page).to have_content "2116-11-01"
+        expect(page).to have_content "Sunday, 01/11/2116"
         fill_in("Message", with: "I want to go there")
         click_button "Submit"
 
@@ -89,6 +89,8 @@ feature "request" do
 
       scenario "shows the received requests" do
         click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
         click_link "nice little room"
         click_link "Add request"
         fill_in("Message", with: "I like your place")
@@ -115,6 +117,8 @@ feature "request" do
         sign_out
         sign_in(email: "test2@test.com")
         click_link "Spaces"
+        fill_in("search_date_field", with: "2116-11-01")
+        click_button "space_search_button"
         click_link "nice little room"
         click_link "Add request"
         fill_in("Message", with: "I like your place")
