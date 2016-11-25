@@ -68,3 +68,28 @@ footer a:hover {
 footer a:active {
     color: rgb(158,158,158);
 }
+
+.msg {
+  font-weight: bold;
+  font-size: small;
+  padding: 12px;
+  padding-left: 16px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.msg-danger {
+  background-color: #FF9C9C;
+}
+
+.msg-success {
+  background-color: #C0FFD7;
+}
+
+.msg-success-text {
+  color: #00C448;
+}
+
+.msg-danger-text {
+  color: #c9302c;
+}

@@ -36,6 +36,7 @@
           <% if user_signed_in? %>
             <a class="mdl-navigation__link" href="/my_requests">My requests</a>
             <a class="mdl-navigation__link" href="/spaces/new">Add space</a>
+            <a class="mdl-navigation__link" href="/users/edit"><%= current_user.email%></a>
             <a class="mdl-navigation__link" href="/users/sign_out" data-method="delete">Sign out</a>
           <% else %>
             <a class="mdl-navigation__link" href="/users/sign_up">Sign up</a>
@@ -45,16 +46,20 @@
       </div>
       <main class="mdl-layout__content">
         <div class="page-content">
-          <div class="" id="notice">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
-              <%= notice if notice %>
+          <% if notice %>
+          <div class="field" id="notice">
+            <div class="msg msg-success msg-success-text">
+              <%= notice %>
             </div>
           </div>
-          <div class="" id="alert">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
-              <%= alert if alert %>
+          <% end %>
+          <% if alert %>
+          <div class="field" id="alert">
+            <div class="msg msg-danger msg-danger-text">
+              <%= alert %>
             </div>
           </div>
+          <% end %>
           <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-cell--8-col-tablet">
               <%= yield %>
