@@ -77,11 +77,13 @@ feature "request" do
         sign_out
         sign_in
         click_link "My requests"
+        request = Request.last
 
         expect(page).not_to have_css("table#my_sent_requests", text: "I like your place")
-        expect(page).to have_css("table#my_received_requests", text: "I like your place")
-        expect(page).to have_css("table#my_received_requests", text: "01/11/2116")
-        expect(page).to have_css("table#my_received_requests", text: "$99")
+        expect(page).to have_css("tr#request_#{request.id}", text: "I like your place")
+        expect(page).to have_css("tr#request_#{request.id}", text: "test2@test.com")
+        expect(page).to have_css("tr#request_#{request.id}", text: "01/11/2116")
+        expect(page).to have_css("tr#request_#{request.id}", text: "$99")
       end
     end
 
