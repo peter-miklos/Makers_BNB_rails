@@ -22,8 +22,8 @@
           <td class="mdl-data-table__cell--non-numeric"><%= request.message %></td>
           <td class="mdl-data-table__cell--non-numeric">
             <% if request.status == "open" %>
-              <%= link_to("Accept", space_request_path(space, request, action_type: "accept"), method: :put, id: "accept_#{request.id}") %> |
-              <%= link_to("Reject", space_request_path(space, request, action_type: "reject"), method: :put, id: "reject_#{request.id}") %>
+              <%= link_to("Accept", space_request_path(space, request, status: "accepted"), method: :put, id: "accept_#{request.id}") %> |
+              <%= link_to("Reject", space_request_path(space, request, status: "rejected"), method: :put, id: "reject_#{request.id}") %>
             <% else %>
               <%= request.status %>
             <% end %>

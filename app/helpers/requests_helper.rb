@@ -51,14 +51,33 @@ module RequestsHelper
     redirect_to(space_path(@space), alert: "You cannot create a request for your post")
   end
 
+  def update_request_statuses
+    @request.update(request_status_param)
+    reject_other_requests if @request.status == "accepted"
+  end
+
   def reject_other_requests
+    request_dates = get_necessary_request_dates
+    set_request_statuses_to_rejected(request_dates)
+  end
+
+  def get_necessary_request_dates
     all_request_dates = RequestDate.all
-    request_date = all_request_dates.find { |req_date| req_date.request_id == @request.id}
-    requests = Request.where(status: "open", space_id: @space.id)
-    all_request_dates = all_request_dates.select { |req_date| req_date.date == request_date.date }
-    request_dates = all_request_dates.select do |req_date|
-      requests.find { |req| req.id == req_date.request_id }
-    end
+    request_date = get_date_of_accepted_request(all_request_dates)
+    find_request_dates_to_be_changed(request_date, all_request_dates)
+  end
+
+  def find_request_dates_to_be_changed(request_date, all_request_dates)
+    open_requests = Request.where(status: "open", space_id: @space.id)
+    all_request_dates = all_request_dates.select { |req_date| req_date.date == request_date }
+    all_request_dates.select { |rd| open_requests.find { |req| req.id == rd.request_id } }
+  end
+
+  def get_date_of_accepted_request(all_request_dates)
+    all_request_dates.find { |req_date| req_date.request_id == @request.id}.date
+  end
+
+  def set_request_statuses_to_rejected(request_dates)
     request_dates.each do |req_date|
       request = Request.find_by(id: req_date.request_id, status: "open")
       request.update(status: "rejected")
