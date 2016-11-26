@@ -9,17 +9,11 @@ feature "request" do
   let!(:date3) { SpaceDate.create(date: "2116-11-03", status: "open", space_id: space1.id) }
 
   context "user logged in" do
-    before {sign_in}
+    before {sign_in(email: "test2@test.com")}
 
     context "create request" do
       scenario "users can add request to other users' spaces after choosing a date" do
-        sign_out
-        sign_in(email: "test2@test.com")
-        visit "/"
-        click_link "Spaces"
-        fill_in("search_date_field", with: "2116-11-01")
-        click_button "space_search_button"
-        click_link "nice little room"
+        find_space_and_click
 
         expect(page).to have_content "Add request"
 
@@ -34,30 +28,13 @@ feature "request" do
       end
 
       scenario "users can add request to an already requested space, but for another date" do
-        sign_out
-        sign_in(email: "test2@test.com")
-        visit "/"
-        click_link "Spaces"
-        fill_in("search_date_field", with: "2116-11-01")
-        click_button "space_search_button"
-        click_link "nice little room"
-        click_link "Add request"
-        fill_in("Message", with: "I want to go there")
-        click_button "Submit"
-        click_link "Spaces"
-        fill_in("search_date_field", with: "2116-11-03")
-        click_button "space_search_button"
-        click_link "nice little room"
-        click_link "Add request"
-        fill_in("Message", with: "I want to go there again")
-        click_button "Submit"
+        find_space_and_add_request
+        find_space_and_add_request(search_date: "2116-11-03", message: "I want to go there again")
         expect(page).to have_css("table#my_sent_requests", text: "open")
         expect(page).to have_css("table#my_sent_requests", text: "I want to go there again")
       end
 
       scenario "user cannot add a request if no date is choosen" do
-        sign_out
-        sign_in(email: "test2@test.com")
         visit "/"
         click_link "Spaces"
         click_link "nice little room"
@@ -68,6 +45,8 @@ feature "request" do
       end
 
       scenario "users cannot see add request link at their own spaces" do
+        sign_out
+        sign_in
         visit "/"
         click_link "Spaces"
         click_link "nice little room"
@@ -76,21 +55,8 @@ feature "request" do
       end
 
       scenario "user cannot add request to a space for a specific date more than once" do
-        sign_out
-        sign_in(email: "test2@test.com")
-        visit "/"
-        click_link "Spaces"
-        fill_in("search_date_field", with: "2116-11-01")
-        click_button "space_search_button"
-        click_link "nice little room"
-        click_link "Add request"
-        fill_in("Message", with: "I want to go there")
-        click_button "Submit"
-        visit "/"
-        click_link "Spaces"
-        fill_in("search_date_field", with: "2116-11-01")
-        click_button "space_search_button"
-        click_link "nice little room"
+        find_space_and_add_request
+        find_space_and_click
         click_link "Add request"
 
         expect(page).to have_css("div#alert", text: "You've already created a request")
@@ -98,12 +64,7 @@ feature "request" do
     end
 
     context "show my received requests" do
-
-      before do
-        sign_out
-        sign_in(email: "test2@test.com")
-        visit "/"
-      end
+      before { visit "/" }
 
       scenario "informs user if there is no received request" do
         click_link "My requests"
@@ -111,13 +72,7 @@ feature "request" do
       end
 
       scenario "shows the received requests" do
-        click_link "Spaces"
-        fill_in("search_date_field", with: "2116-11-01")
-        click_button "space_search_button"
-        click_link "nice little room"
-        click_link "Add request"
-        fill_in("Message", with: "I like your place")
-        click_button "Submit"
+        find_space_and_add_request(message: "I like your place")
         sign_out
         sign_in
         click_link "My requests"
@@ -126,6 +81,12 @@ feature "request" do
         expect(page).to have_css("table#my_received_requests", text: "I like your place")
         expect(page).to have_css("table#my_received_requests", text: "01/11/2116")
         expect(page).to have_css("table#my_received_requests", text: "$99")
+      end
+    end
+
+    context "manage received requests" do
+      before do
+
       end
     end
 
@@ -138,15 +99,7 @@ feature "request" do
       end
 
       scenario "shows the available sent requests" do
-        sign_out
-        sign_in(email: "test2@test.com")
-        click_link "Spaces"
-        fill_in("search_date_field", with: "2116-11-01")
-        click_button "space_search_button"
-        click_link "nice little room"
-        click_link "Add request"
-        fill_in("Message", with: "I like your place")
-        click_button "Submit"
+        find_space_and_add_request(message: "I like your place")
         click_link "My requests"
 
         expect(page).not_to have_content "No sent requests"
