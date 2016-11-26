@@ -3,6 +3,7 @@ require "rails_helper"
 feature "request" do
   let!(:user1){ User.create(email: "test1@test.com", password: 123456)}
   let!(:user2){ User.create(email: "test2@test.com", password: 123456)}
+  let!(:user3){ User.create(email: "test3@test.com", password: 123456)}
   let!(:space1){ Space.create(name: "nice little room", price: 99, description: "test", user_id: user1.id) }
   let!(:date1) { SpaceDate.create(date: "2116-11-01", status: "open", space_id: space1.id) }
   let!(:date2) { SpaceDate.create(date: "2116-11-02", status: "booked", space_id: space1.id) }
@@ -86,8 +87,36 @@ feature "request" do
 
     context "manage received requests" do
       before do
-
+        find_space_and_add_request(message: "Test One")
+        sign_out
+        sign_in(email: "test3@test.com")
+        find_space_and_add_request(message: "Test Two")
+        sign_out
+        sign_in
       end
+
+      scenario "user can reject a received request, the rest of the requests will not be changed" do
+        request1 = Request.find_by(message: "Test One")
+        request2 = Request.find_by(message: "Test Two")
+        click_link "My requests"
+        click_button("reject_#{request1.id}")
+
+        expect(page).to have_css("tr#request_#{request1.id}", text: "rejected")
+        expect(find_button("accept_#{request2.id}")).to be_true
+        expect(find_button("reject_#{request2.id}")).to be_true
+      end
+
+      scenario "user can accept a request and rest for the same day/space will be rejected" do
+        request1 = Request.find_by(message: "Test One")
+        request2 = Request.find_by(message: "Test Two")
+        click_link "My requests"
+        click_button("accept_#{request1.id}")
+
+        expect(page).to have_css("tr#request_#{request1.id}", text: "accepted")
+        expect(page).to have_css("tr#request_#{request2.id}", text: "rejected")
+      end
+
+
     end
 
     context "show my sent requests" do
