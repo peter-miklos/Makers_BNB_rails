@@ -14,13 +14,20 @@
     <tbody>
       <% @my_received_requests.each.with_index do |request, index| %>
       <% space = @my_spaces.find { |space| space.id == request.space_id }%>
-        <tr>
+        <tr id="request_<%= request.id %>">
           <td><%= index + 1 %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= link_to space.name, space_path(space) %></td>
           <td>$<%= space.price %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= @all_received_request_dates.find { |date| date.request_id == request.id }.date.to_date.strftime("%d/%m/%Y")%></td>
           <td class="mdl-data-table__cell--non-numeric"><%= request.message %></td>
-          <td class="mdl-data-table__cell--non-numeric"><%= request.status %></td>
+          <td class="mdl-data-table__cell--non-numeric">
+            <% if request.status == "open" %>
+              <%= link_to("Accept", space_request_path(space, request, action_type: "accept"), method: :put, id: "accept_#{request.id}") %> |
+              <%= link_to("Reject", space_request_path(space, request, action_type: "reject"), method: :put, id: "reject_#{request.id}") %>
+            <% else %>
+              <%= request.status %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

@@ -21,9 +21,18 @@ class RequestsController < ApplicationController
     create_new_request
   end
 
+  def update
+    @space = Space.find(params[:space_id])
+    @request = Request.find(params[:id])
+    @request.update(status: "accepted") if params[:action_type] == "accept"
+    @request.update(status: "rejected") if params[:action_type] == "reject"
+    reject_other_requests if params[:action_type] == "accept"
+    redirect_to my_requests_path
+  end
+
   private
 
   def request_params
-    params.require(:request).permit(:message)
+    params.require(:request).permit(:message, :status)
   end
 end

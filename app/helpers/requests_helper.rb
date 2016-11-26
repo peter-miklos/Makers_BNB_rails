@@ -50,4 +50,18 @@ module RequestsHelper
   def handle_same_ownership
     redirect_to(space_path(@space), alert: "You cannot create a request for your post")
   end
+
+  def reject_other_requests
+    all_request_dates = RequestDate.all
+    request_date = all_request_dates.find { |req_date| req_date.request_id == @request.id}
+    requests = Request.where(status: "open", space_id: @space.id)
+    all_request_dates = all_request_dates.select { |req_date| req_date.date == request_date.date }
+    request_dates = all_request_dates.select do |req_date|
+      requests.find { |req| req.id == req_date.request_id }
+    end
+    request_dates.each do |req_date|
+      request = Request.find_by(id: req_date.request_id, status: "open")
+      request.update(status: "rejected")
+    end
+  end
 end

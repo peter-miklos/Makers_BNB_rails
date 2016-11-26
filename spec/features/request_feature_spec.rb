@@ -99,23 +99,24 @@ feature "request" do
         request1 = Request.find_by(message: "Test One")
         request2 = Request.find_by(message: "Test Two")
         click_link "My requests"
-        click_button("reject_#{request1.id}")
+        click_link("reject_#{request1.id}")
 
         expect(page).to have_css("tr#request_#{request1.id}", text: "rejected")
-        expect(find_button("accept_#{request2.id}")).to be_true
-        expect(find_button("reject_#{request2.id}")).to be_true
+        within(:css, "tr#request_#{request2.id}") do
+          expect(page).to have_content "Accept"
+          expect(page).to have_content "Reject"
+        end
       end
 
       scenario "user can accept a request and rest for the same day/space will be rejected" do
         request1 = Request.find_by(message: "Test One")
         request2 = Request.find_by(message: "Test Two")
         click_link "My requests"
-        click_button("accept_#{request1.id}")
+        click_link("accept_#{request1.id}")
 
         expect(page).to have_css("tr#request_#{request1.id}", text: "accepted")
         expect(page).to have_css("tr#request_#{request2.id}", text: "rejected")
       end
-
 
     end
 
