@@ -4,23 +4,32 @@
     <thead>
       <tr>
         <th>#</th>
-        <th class="mdl-data-table__cell--non-numeric">Name</th>
+        <th class="mdl-data-table__cell--non-numeric">Space name</th>
+        <th class="mdl-data-table__cell--non-numeric">Sent by</th>
         <th class="mdl-data-table__cell--non-numeric">Price</th>
         <th class="mdl-data-table__cell--non-numeric">Date</th>
-        <th class="mdl-data-table__cell--non-numeric">My message</th>
+        <th class="mdl-data-table__cell--non-numeric">Message</th>
         <th class="mdl-data-table__cell--non-numeric">Action/status</th>
       </tr>
     </thead>
     <tbody>
       <% @my_received_requests.each.with_index do |request, index| %>
       <% space = @my_spaces.find { |space| space.id == request.space_id }%>
-        <tr>
+        <tr id="request_<%= request.id %>">
           <td><%= index + 1 %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= link_to space.name, space_path(space) %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= @users_of_received_requests.find {|user| user.id == request.user_id }.email %></td>
           <td>$<%= space.price %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= @all_received_request_dates.find { |date| date.request_id == request.id }.date.to_date.strftime("%d/%m/%Y")%></td>
           <td class="mdl-data-table__cell--non-numeric"><%= request.message %></td>
-          <td class="mdl-data-table__cell--non-numeric"><%= request.status %></td>
+          <td class="mdl-data-table__cell--non-numeric">
+            <% if request.status == "open" %>
+              <%= link_to("Accept", space_request_path(space, request, status: "accepted"), method: :put, id: "accept_#{request.id}") %> |
+              <%= link_to("Reject", space_request_path(space, request, status: "rejected"), method: :put, id: "reject_#{request.id}") %>
+            <% else %>
+              <%= request.status %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

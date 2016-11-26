@@ -21,9 +21,20 @@ class RequestsController < ApplicationController
     create_new_request
   end
 
+  def update
+    @space = Space.find(params[:space_id])
+    @request = Request.find(params[:id])
+    update_request_statuses
+    redirect_to my_requests_path
+  end
+
   private
 
   def request_params
-    params.require(:request).permit(:message)
+    params.require(:request).permit(:message, :status)
+  end
+
+  def request_status_param
+    params.permit(:status)
   end
 end
