@@ -25,6 +25,7 @@ module SpacesHelper
     show_spaces(space_dates)
     @search_date = search_date
     session[:search_date] = search_date
+    render component: 'Spaces', props: { spaces: @spaces, search_date: @search_date }, class: 'spaces'
   end
 
   def show_all_spaces(current_date)
@@ -37,5 +38,6 @@ module SpacesHelper
   def show_spaces(space_dates)
     space_ids = space_dates.map { |space_date| space_date.space_id }.uniq
     @spaces = Space.where(id: space_ids)
+    render component: 'Spaces', props: { spaces: @spaces, search_date: session[:search_date] }, class: 'spaces'
   end
 end
