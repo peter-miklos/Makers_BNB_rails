@@ -4,8 +4,10 @@ module SpacesHelper
     current_date = Time.new.strftime("%F")
     if wrong_date_searched?(current_date)
       redirect_to spaces_path, alert: "Date cannot be in the past"
-    elsif search_date_used? then show_spaces_on_date
-    else show_all_spaces(current_date)
+    elsif
+      spaces = Space.all
+      search_date = session[:search_date] ? session[:search_date] : current_date
+      render component: 'Spaces', props: { spaces: spaces, search_date: search_date }, class: 'spaces'
     end
   end
 

@@ -17,8 +17,10 @@ class Spaces extends React.Component {
       return "Available spaces"
   }
 
-  handleSpaceList(spaces) {
-    if (spaces.length === 0)
+  handleSpaceList(spaces, date) {
+    if (date === "")
+      return "Choose a date first"
+    else if (spaces.length === 0)
       return "No spaces found"
     else {
       return (
@@ -32,19 +34,20 @@ class Spaces extends React.Component {
             </tr>
           </thead>
           <tbody>
-            { this.handleSpaceListContent(spaces) }
+            { this.handleSpaceListContent(spaces, date) }
           </tbody>
         </table>
       )
     }
   }
 
-  handleSpaceListContent(spaces) {
+  handleSpaceListContent(spaces, date) {
     return spaces.map(function(space, index) {
       return React.createElement(Space, {
         key: space.id,
         space: space,
-        index: index
+        index: index,
+        date: date
       })
     });
   }
@@ -71,6 +74,7 @@ class Spaces extends React.Component {
   }
 
   render() {
+    spacesToShow = this.state.searchDate === "" ? [] : this.state.availableSpaces
     return (
       <div className="Spaces">
         <h4> { this.handleHeader() } </h4>
@@ -82,7 +86,7 @@ class Spaces extends React.Component {
           </form>
         </div>
         <div className="spaceListContent">
-          { this.handleSpaceList(this.state.availableSpaces) }
+          { this.handleSpaceList(spacesToShow, this.state.searchDate) }
         </div>
       </div>
     )
