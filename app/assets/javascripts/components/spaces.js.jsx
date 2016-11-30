@@ -3,19 +3,22 @@ class Spaces extends React.Component {
     super(props);
     this.state = {
       availableSpaces: props.spaces,
-      searchDate: props.search_date
-    }
+      searchDate: props.search_date ? props.search_date : ""
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleHeader() {
-    if (this.searchDate)
-      return "Available spaces on `this.search_date`"
+    if (this.state.searchDate)
+      return `Available spaces on ${this.state.searchDate}`
     else
       return "Available spaces"
   }
 
-  handleSpaceList() {
-    if (this.state.availableSpaces.length === 0)
+  handleSpaceList(spaces) {
+    if (spaces.length === 0)
       return "No spaces found"
     else {
       return (
@@ -29,15 +32,15 @@ class Spaces extends React.Component {
             </tr>
           </thead>
           <tbody>
-            { this.handleSpaceListContent() }
+            { this.handleSpaceListContent(spaces) }
           </tbody>
         </table>
       )
     }
   }
 
-  handleSpaceListContent() {
-    return this.state.availableSpaces.map(function(space, index) {
+  handleSpaceListContent(spaces) {
+    return spaces.map(function(space, index) {
       return React.createElement(Space, {
         key: space.id,
         space: space,
@@ -46,45 +49,42 @@ class Spaces extends React.Component {
     });
   }
 
+  handleChange(event, spaces) {
+    this.setState({
+      searchDate: event.target.value,
+      availableSpaces: spaces
+    })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    let spaces = this.state.availableSpaces.filter(function(e) { return e.price < 100 })
+    this.handleChange(event, spaces);
+  }
+
+  handleClick(event) {
+    event.preventDefault();
+    this.setState({
+      availableSpaces: this.props.spaces,
+      searchDate: ""
+    })
+  }
+
   render() {
     return (
       <div className="Spaces">
         <h4> { this.handleHeader() } </h4>
         <div className="mdl-grid">
-          <form acceptCharset="UTF-8" action="/spaces" method="get" id="search_date_form">
-            <input name="utf8" type="hidden" value="&#x2713;" />
-            <input name="authenticity_token" type="hidden" value="J7CBxfHalt49OSHp27hblqK20c9PgwJ108nDHX/8Cts=" />
-            <input type="date" name="search_date" className="searchBox" id="search_date_field" value={this.state.searchDate ? this.state.searchDate : ""} required />
-            <button type="submit" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="space_search_button">Search</button>
-            <span> </span><a href="/spaces?filter=all">Show all</a>
+          <form acceptCharset="UTF-8" id="search_date_form" onSubmit={this.handleSubmit}>
+            Filter for date:
+            <input type="date" name="search_date" className="searchBox" id="search_date_field" value={this.state.searchDate} onChange={this.handleSubmit} required />
+            <span> </span><a onClick={this.handleClick}>Show all</a>
           </form>
         </div>
         <div className="spaceListContent">
-          { this.handleSpaceList() }
+          { this.handleSpaceList(this.state.availableSpaces) }
         </div>
       </div>
     )
   }
 }
-
-
-
-
-// var Spaces = React.createClass({
-//   handleHeader: function() {
-//
-//   },
-//   getInitialState: function() {
-//     return {allSpaces: this.spaces}
-//   },
-//   getDefaultProps: function() {
-//     return {allSpaces: []}
-//   },
-//   render: function() {
-//    return (
-//      <div className="Spaces">
-//        <h4>Available spaces</h4>
-//      </div>
-//    );
-//   }
-// })
