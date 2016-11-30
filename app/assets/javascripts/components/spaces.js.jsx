@@ -50,7 +50,6 @@ class Spaces extends React.Component {
     return this.props.spaces.filter(function(e) {
       return spaceDates.find(function(d) { return d.space_id === e.id })
     })
-    // return spaces
   }
 
   handleSpaceListContent(spaces, date) {
@@ -88,12 +87,9 @@ class Spaces extends React.Component {
     return (
       <div className="Spaces">
         <h4> {this.handleHeader()} </h4>
-        <div className="mdl-grid">
-          <form acceptCharset="UTF-8" id="search_date_form" onSubmit={this.handleSubmit}>
-            {"Filter for date: "}
-            <input type="date" name="search_date" className="searchBox" id="search_date_field" value={this.state.searchDate} onChange={this.handleSubmit} required />
-            <span> </span><a onClick={this.handleClick}>Show all</a>
-          </form>
+        <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <label htmlFor="search_date_field">Filter for date </label>
+          <input type="date" name="search_date_field" className="mdl-textfield__input" id="search_date_field" value={this.state.searchDate} onChange={this.handleSubmit} required />
         </div>
         <div className="spaceListContent">
           {this.handleSpaceList(spacesToShow, this.state.searchDate)}
