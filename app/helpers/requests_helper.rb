@@ -83,4 +83,9 @@ module RequestsHelper
       request.update(status: "rejected")
     end
   end
+
+  def update_space_date
+    space_date = SpaceDate.find_by(space_id: @space.id, date: params[:request_date].to_date, status: "open")
+    space_date.update(status: "booked")
+  end
 end

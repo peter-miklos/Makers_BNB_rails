@@ -6,8 +6,9 @@ module SpacesHelper
       redirect_to spaces_path, alert: "Date cannot be in the past"
     elsif
       spaces = Space.all
+      space_dates = SpaceDate.where(status: "open")
       search_date = session[:search_date] ? session[:search_date] : current_date
-      render component: 'Spaces', props: { spaces: spaces, search_date: search_date }, class: 'spaces'
+      render component: 'Spaces', props: { spaces: spaces, search_date: search_date, space_dates: space_dates }, class: 'spaces'
     end
   end
 

@@ -3,6 +3,7 @@ class Spaces extends React.Component {
     super(props);
     this.state = {
       availableSpaces: props.spaces,
+      spaceDates: props.space_dates,
       searchDate: props.search_date ? props.search_date : ""
     };
     this.handleChange = this.handleChange.bind(this);
@@ -23,6 +24,7 @@ class Spaces extends React.Component {
     else if (spaces.length === 0)
       return "No spaces found"
     else {
+      spaces = this.updateAvailableSpaces(date);
       return (
         <table className="spaceListTable mdl-js-data-table mdl-shadow--2dp">
           <thead>
@@ -41,6 +43,16 @@ class Spaces extends React.Component {
     }
   }
 
+  updateAvailableSpaces(date) {
+    let spaceDates = this.state.spaceDates.filter(function(e) {
+      return e.date.toString() == date
+    })
+    return this.props.spaces.filter(function(e) {
+      return spaceDates.find(function(d) { return d.space_id === e.id })
+    })
+    // return spaces
+  }
+
   handleSpaceListContent(spaces, date) {
     return spaces.map(function(space, index) {
       return React.createElement(Space, {
@@ -52,17 +64,15 @@ class Spaces extends React.Component {
     });
   }
 
-  handleChange(event, spaces) {
+  handleChange(event) {
     this.setState({
-      searchDate: event.target.value,
-      availableSpaces: spaces
+      searchDate: event.target.value
     })
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    let spaces = this.state.availableSpaces.filter(function(e) { return e.price < 100 })
-    this.handleChange(event, spaces);
+    this.handleChange(event);
   }
 
   handleClick(event) {
@@ -74,19 +84,19 @@ class Spaces extends React.Component {
   }
 
   render() {
-    spacesToShow = this.state.searchDate === "" ? [] : this.state.availableSpaces
+    let spacesToShow = this.state.searchDate === "" ? [] : this.state.availableSpaces
     return (
       <div className="Spaces">
-        <h4> { this.handleHeader() } </h4>
+        <h4> {this.handleHeader()} </h4>
         <div className="mdl-grid">
           <form acceptCharset="UTF-8" id="search_date_form" onSubmit={this.handleSubmit}>
-            Filter for date:
+            {"Filter for date: "}
             <input type="date" name="search_date" className="searchBox" id="search_date_field" value={this.state.searchDate} onChange={this.handleSubmit} required />
             <span> </span><a onClick={this.handleClick}>Show all</a>
           </form>
         </div>
         <div className="spaceListContent">
-          { this.handleSpaceList(spacesToShow, this.state.searchDate) }
+          {this.handleSpaceList(spacesToShow, this.state.searchDate)}
         </div>
       </div>
     )

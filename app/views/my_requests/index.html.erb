@@ -20,12 +20,13 @@
           <td class="mdl-data-table__cell--non-numeric"><%= link_to space.name, space_path(space) %></td>
           <td class="mdl-data-table__cell--non-numeric"><%= @users_of_received_requests.find {|user| user.id == request.user_id }.email %></td>
           <td>$<%= space.price %></td>
-          <td class="mdl-data-table__cell--non-numeric"><%= @all_received_request_dates.find { |date| date.request_id == request.id }.date.to_date.strftime("%d/%m/%Y")%></td>
+          <% request_date =  @all_received_request_dates.find { |date| date.request_id == request.id }.date.to_date%>
+          <td class="mdl-data-table__cell--non-numeric"><%= request_date.strftime("%d/%m/%Y")%></td>
           <td class="mdl-data-table__cell--non-numeric"><%= request.message %></td>
           <td class="mdl-data-table__cell--non-numeric">
             <% if request.status == "open" %>
-              <%= link_to("Accept", space_request_path(space, request, status: "accepted"), method: :put, id: "accept_#{request.id}") %> |
-              <%= link_to("Reject", space_request_path(space, request, status: "rejected"), method: :put, id: "reject_#{request.id}") %>
+              <%= link_to("Accept", space_request_path(space, request, status: "accepted", request_date: request_date), method: :put, id: "accept_#{request.id}") %> |
+              <%= link_to("Reject", space_request_path(space, request, status: "rejected", request_date: request_date), method: :put, id: "reject_#{request.id}") %>
             <% else %>
               <%= request.status %>
             <% end %>
