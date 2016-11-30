@@ -14,7 +14,7 @@ feature "request" do
 
     context "create request" do
       scenario "users can add request to other users' spaces after choosing a date" do
-        find_space_and_click
+        find_space_and_click(space: space1)
 
         expect(page).to have_content "Add request"
 
@@ -29,38 +29,33 @@ feature "request" do
       end
 
       scenario "users can add request to an already requested space, but for another date" do
-        find_space_and_add_request
-        find_space_and_add_request(search_date: "2116-11-03", message: "I want to go there again")
+        find_space_and_add_request(space: space1)
+        find_space_and_add_request(search_date: "2116-11-03", message: "I want to go there again", space: space1)
         expect(page).to have_css("table#my_sent_requests", text: "open")
         expect(page).to have_css("table#my_sent_requests", text: "I want to go there again")
       end
 
       scenario "user cannot add a request if no date is choosen" do
-        visit "/"
-        click_link "Spaces"
-        click_link "nice little room"
-        click_link "Add request"
+        visit "/spaces/#{space1.id}"
 
-        expect(current_path).to eq("/spaces/#{space1.id}")
-        expect(page).to have_css("div#alert", text: "You cannot create a request without choosing a date")
+        expect(current_path).to eq("/spaces")
+        expect(page).to have_css("div#alert", text: "Date must be chosen")
       end
 
       scenario "users cannot see add request link at their own spaces" do
         sign_out
         sign_in
-        visit "/"
-        click_link "Spaces"
-        click_link "nice little room"
+        find_space_and_click(space: space1)
 
         expect(page).not_to have_content("Add request")
       end
 
       scenario "user cannot add request to a space for a specific date more than once" do
-        find_space_and_add_request
-        find_space_and_click
+        find_space_and_add_request(space: space1)
+        find_space_and_click(space: space1)
         click_link "Add request"
 
-        expect(page).to have_css("div#alert", text: "You've already created a request")
+        expect(page).to have_css("div#alert", text: "Date must be chosen")
       end
     end
 
@@ -73,7 +68,7 @@ feature "request" do
       end
 
       scenario "shows the received requests" do
-        find_space_and_add_request(message: "I like your place")
+        find_space_and_add_request(message: "I like your place", space: space1)
         sign_out
         sign_in
         click_link "My requests"
@@ -89,10 +84,10 @@ feature "request" do
 
     context "manage received requests" do
       before do
-        find_space_and_add_request(message: "Test One")
+        find_space_and_add_request(message: "Test One", space: space1)
         sign_out
         sign_in(email: "test3@test.com")
-        find_space_and_add_request(message: "Test Two")
+        find_space_and_add_request(message: "Test Two", space: space1)
         sign_out
         sign_in
       end
@@ -131,7 +126,7 @@ feature "request" do
       end
 
       scenario "shows the available sent requests" do
-        find_space_and_add_request(message: "I like your place")
+        find_space_and_add_request(message: "I like your place", space: space1)
         click_link "My requests"
 
         expect(page).not_to have_content "No sent requests"
@@ -148,9 +143,7 @@ feature "request" do
     context "create request" do
 
       scenario "user cannot see add request link if logged out" do
-        visit "/"
-        click_link "Spaces"
-        click_link "nice little room"
+        find_space_and_click(space: space1)
 
         expect(current_path).to eq "/spaces/#{space1.id}"
         expect(page).not_to have_content("Add request")

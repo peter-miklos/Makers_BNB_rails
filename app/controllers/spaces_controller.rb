@@ -30,7 +30,7 @@ class SpacesController < ApplicationController
     if params[:date] && params[:date] < current_date
       redirect_to spaces_path, alert: "Date cannot be in the past"
     elsif !params[:date]
-      redirect_to spaces_path, alert: "Date must be choosen"
+      redirect_to spaces_path, alert: "Date must be chosen"
     elsif params[:date] && date_booked?
       redirect_to spaces_path, alert: "Space is not available on this date"
     else
