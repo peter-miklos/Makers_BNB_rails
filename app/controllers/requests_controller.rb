@@ -25,6 +25,7 @@ class RequestsController < ApplicationController
     @space = Space.find(params[:space_id])
     @request = Request.find(params[:id])
     update_request_statuses
+    update_space_date
     redirect_to my_requests_path
   end
 

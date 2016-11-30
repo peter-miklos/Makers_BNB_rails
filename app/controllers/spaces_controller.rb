@@ -26,9 +26,19 @@ class SpacesController < ApplicationController
   end
 
   def show
-    @space = Space.find(params[:id])
-    @owner = User.find(@space.user_id)
-    @available_space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
+    current_date = Time.new.strftime("%F")
+    if params[:date] && params[:date] < current_date
+      redirect_to spaces_path, alert: "Date cannot be in the past"
+    elsif !params[:date]
+      redirect_to spaces_path, alert: "Date must be chosen"
+    elsif params[:date] && date_booked?
+      redirect_to spaces_path, alert: "Space is not available on this date"
+    else
+      session[:search_date] = params[:date]
+      @space = Space.find(params[:id])
+      @owner = User.find(@space.user_id)
+      @available_space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
+    end
   end
 
   def edit
@@ -39,7 +49,7 @@ class SpacesController < ApplicationController
     @space = Space.find(params[:id])
     if (current_user.id == @space.user_id)
       @space.update(space_params)
-      redirect_to space_path(@space), notice: "Space successfully updated"
+      redirect_to "/spaces/#{@space.id}?date=#{session[:search_date]}", notice: "Space successfully updated"
     else
       redirect_to space_path(@space), alert: "You cannot update this space"
     end
