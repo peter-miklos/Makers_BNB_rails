@@ -49,6 +49,7 @@ group :test do
   gem 'capybara'
   gem 'coveralls', require: false
   gem 'simplecov'
+  gem 'selenium-webdriver'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
