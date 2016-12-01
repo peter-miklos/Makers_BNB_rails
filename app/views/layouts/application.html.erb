@@ -37,6 +37,9 @@
             <a class="mdl-navigation__link" href="/my_requests">My requests</a>
             <a class="mdl-navigation__link" href="/spaces/new">Add space</a>
             <a class="mdl-navigation__link" href="/users/edit"><%= current_user.email%></a>
+            <% if current_user.admin %>
+              <a class="mdl-navigation__link" href="/admin">Admin</a>
+            <% end %>
             <a class="mdl-navigation__link" href="/users/sign_out" data-method="delete">Sign out</a>
           <% else %>
             <a class="mdl-navigation__link" href="/users/sign_up">Sign up</a>
