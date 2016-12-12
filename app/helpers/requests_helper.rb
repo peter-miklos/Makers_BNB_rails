@@ -18,6 +18,12 @@ module RequestsHelper
     end
   end
 
+  def alert_user_unless_search_date
+    unless session[:search_date]
+      redirect_to space_path(@space), alert: "You cannot create a request without choosing a date" and return
+    end
+  end
+
   def render_new_request_view
     booked_date = get_booked_date
     @request = Request.new if (date_available_for_current_user?(booked_date))

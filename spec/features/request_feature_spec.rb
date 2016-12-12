@@ -58,6 +58,13 @@ feature "request" do
 
         expect(page).to have_css("div#alert", text: "You've already created a request")
       end
+
+      scenario "user cannot add request to a space for a date that is not available" do
+        find_space_and_click(search_date: "2000-11-09", space: space1)
+        click_link "Add request"
+
+        expect(page).to have_css("div#alert", text: "Space is not available on this date")
+      end
     end
 
     context "show my received requests" do
