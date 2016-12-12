@@ -9,11 +9,10 @@ class RequestsController < ApplicationController
   def new
     @space = Space.find(params[:space_id])
     if session[:search_date]
-      @owner = User.find(@space.user_id)
-      @request_date = session[:search_date]
-      render_new_request_view
+      alert_user_to_use_proper_date unless search_date_available?
+      execute_new_request if search_date_available?
     else
-      redirect_to space_path(@space), alert: "You cannot create a request without choosing a date" and return
+      alert_user_if_no_search_date_used
     end
   end
 

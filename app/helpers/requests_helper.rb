@@ -18,6 +18,25 @@ module RequestsHelper
     end
   end
 
+  def alert_user_if_no_search_date_used
+    redirect_to space_path(@space), alert: "You cannot create a request without choosing a date" and return
+  end
+
+  def alert_user_to_use_proper_date
+    redirect_to space_path(@space), alert: "Space is not available on this date" and return
+  end
+
+  def search_date_available?
+    space_date = SpaceDate.find_by(date: session[:search_date], status: "open") if session[:search_date]
+    session[:search_date] && space_date
+  end
+
+  def execute_new_request
+    @owner = User.find(@space.user_id)
+    @request_date = session[:search_date]
+    render_new_request_view
+  end
+
   def render_new_request_view
     booked_date = get_booked_date
     @request = Request.new if (date_available_for_current_user?(booked_date))
