@@ -74,14 +74,14 @@ feature "spaces" do
 
     context "show space details" do
       scenario "user can see the details of a space if logged in" do
-        visit "/spaces/#{space1.id}?date=2116-11-01"
+        visit "/spaces/#{space1.id}"
 
         expect(page).to have_content "nice little room"
         expect(page).to have_content "test"
       end
 
       scenario "user can see the non-booked dates only at spaces/show" do
-        visit "/spaces/#{space1.id}?date=2116-11-01"
+        visit "/spaces/#{space1.id}"
 
         expect(page).to have_content("2116-11-01")
         expect(page).not_to have_content("2116-11-02")
@@ -90,7 +90,7 @@ feature "spaces" do
 
     context "edit space" do
       scenario "users can access and modify their own spaces" do
-        visit "/spaces/#{space1.id}?date=2116-11-01"
+        visit "/spaces/#{space1.id}"
         click_link("Edit space")
 
         expect(current_path).to eq "/spaces/#{space1.id}/edit"
@@ -108,7 +108,7 @@ feature "spaces" do
       end
 
       scenario "user can go back to previous page before submitting any change" do
-        visit "/spaces/#{space1.id}?date=2116-11-01"
+        visit "/spaces/#{space1.id}"
         click_link("Edit space")
         click_link("Cancel")
 
@@ -118,22 +118,22 @@ feature "spaces" do
       scenario "users cannot access edit link at other users' spaces" do
         sign_out
         sign_in(email: "test2@test.com")
-        visit "/spaces/#{space1.id}?date=2116-11-01"
+        visit "/spaces/#{space1.id}"
 
         expect(page).not_to have_content("Edit space")
       end
 
       scenario "users cannot edit other users' spaces" do
-        skip
+        # skip
         sign_out
         sign_in(email: "test2@test.com")
-        visit "/spaces/#{space1.id}?date=2116-11-01"
+        # visit "/spaces/#{space1.id}?date=2116-11-01"
         visit "/spaces/#{space1.id}/edit"
         fill_in("Description", with: "Updated description")
         click_button "Update"
 
         expect(page).to have_css("div#alert", text: "You cannot update this space")
-        # expect(page).not_to have_content("Updated description")
+        expect(page).not_to have_content("Updated description")
       end
 
     end
@@ -195,7 +195,7 @@ feature "spaces" do
 
     context "show space" do
       scenario "user can see the content of a posted space if logged out" do
-        visit "/spaces/#{space1.id}?date=2116-11-01"
+        visit "/spaces/#{space1.id}"
 
         expect(page).to have_content "nice little room"
         expect(page).to have_content "test"
