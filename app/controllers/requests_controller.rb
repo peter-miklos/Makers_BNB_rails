@@ -8,16 +8,11 @@ class RequestsController < ApplicationController
 
   def new
     @space = Space.find(params[:space_id])
-    alert_user_unless_search_date
     if session[:search_date]
-      space_date = SpaceDate.find_by(date: session[:search_date], status: "open")
-      if !space_date
-        redirect_to space_path(@space), alert: "Space is not available on this date" and return
-      else
-        @owner = User.find(@space.user_id)
-        @request_date = session[:search_date]
-        render_new_request_view
-      end
+      alert_user_to_use_proper_date unless search_date_available?
+      execute_new_request if search_date_available?
+    else
+      alert_user_if_no_search_date_used
     end
   end
 
