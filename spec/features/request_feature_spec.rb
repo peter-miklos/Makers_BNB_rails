@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "request" do
+feature "requests" do
   let!(:user1){ User.create(email: "test1@test.com", password: 123456)}
   let!(:user2){ User.create(email: "test2@test.com", password: 123456)}
   let!(:user3){ User.create(email: "test3@test.com", password: 123456)}
