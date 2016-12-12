@@ -37,9 +37,10 @@ feature "request" do
 
       scenario "user cannot add a request if no date is choosen" do
         visit "/spaces/#{space1.id}"
+        click_link "Add request"
 
-        expect(current_path).to eq("/spaces")
-        expect(page).to have_css("div#alert", text: "Date must be chosen")
+        expect(current_path).to eq("/spaces/#{space1.id}")
+        expect(page).to have_css("div#alert", text: "You cannot create a request without choosing a date")
       end
 
       scenario "users cannot see add request link at their own spaces" do
@@ -55,7 +56,7 @@ feature "request" do
         find_space_and_click(space: space1)
         click_link "Add request"
 
-        expect(page).to have_css("div#alert", text: "Date must be chosen")
+        expect(page).to have_css("div#alert", text: "You've already created a request")
       end
     end
 

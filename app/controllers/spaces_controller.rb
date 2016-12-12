@@ -31,18 +31,6 @@ class SpacesController < ApplicationController
     @space = Space.find(params[:id])
     @owner = User.find(@space.user_id)
     @available_space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
-    # if params[:date] && params[:date] < current_date
-    #   redirect_to spaces_path, alert: "Date cannot be in the past"
-    # elsif !params[:date]
-    #   redirect_to spaces_path, alert: "Date must be chosen"
-    # elsif params[:date] && date_booked?
-    #   redirect_to spaces_path, alert: "Space is not available on this date"
-    # else
-    #   session[:search_date] = params[:date]
-    #   @space = Space.find(params[:id])
-    #   @owner = User.find(@space.user_id)
-    #   @available_space_dates = SpaceDate.where(:space_id => params[:id], :status => "open")
-    # end
   end
 
   def edit
